@@ -25,6 +25,7 @@ import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 import javax.annotation.Resource;
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -79,11 +80,13 @@ public class EgovSampleController {
 	 * @return "egovSampleList"
 	 * @exception Exception
 	 */
-	@RequestMapping(value = "/egovSampleList.do")
+	@RequestMapping(value="/egovSampleList.do")
 	public String selectSampleList(@ModelAttribute("searchVO") SampleDefaultVO searchVO, ModelMap model) throws Exception {
 
+		int noticetotcnt = sampleService.selectSampleNoticeListTotCnt(searchVO);
+		
 		/** EgovPropertyService.sample */
-		searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
+		searchVO.setPageUnit(propertiesService.getInt("pageUnit")-noticetotcnt);
 		searchVO.setPageSize(propertiesService.getInt("pageSize"));
 
 		/** pageing setting */
@@ -113,7 +116,7 @@ public class EgovSampleController {
 	 * @return "egovSampleRegister"
 	 * @exception Exception
 	 */
-	@RequestMapping(value = "/addSample.do", method = RequestMethod.GET)
+	@RequestMapping(value="/addSample.do",method=RequestMethod.GET)
 	public String addSampleView(@ModelAttribute("searchVO") SampleDefaultVO searchVO, Model model) throws Exception {
 		model.addAttribute("sampleVO", new SampleVO());
 		return "sample/egovSampleRegister";
@@ -127,23 +130,21 @@ public class EgovSampleController {
 	 * @return "forward:/egovSampleList.do"
 	 * @exception Exception
 	 */
-	@RequestMapping(value = "/addSample.do", method = RequestMethod.POST)
-	public String addSample(@ModelAttribute("searchVO") SampleDefaultVO searchVO, SampleVO sampleVO, BindingResult bindingResult, Model model, SessionStatus status)
-			throws Exception {
-
-//		Server-Side Validation
-//		beanValidator.validate(sampleVO, bindingResult);
-
-//		if (bindingResult.hasErrors()) {
-//			model.addAttribute("sampleVO", sampleVO);
-//			return "sample/egovSampleRegister";
-//		}
-		
-		
+	@RequestMapping(value="/addSample.do",method=RequestMethod.POST)
+	public String addSample(@ModelAttribute("searchVO") SampleDefaultVO searchVO, 
+							SampleVO sampleVO, BindingResult bindingResult, 
+							Model model, SessionStatus status, @RequestParam String flag)
+	throws Exception {
+		String flagNmsg = validService.Validator(sampleVO, flag);
+		if(!flagNmsg.equalsIgnoreCase("ok")){
+			model.addAttribute("sampleVO", sampleVO);
+			model.addAttribute("errMsg", flagNmsg);
+			return "sample/egovSampleRegister";
+		}
 
 		sampleService.insertSample(sampleVO);
 		status.setComplete();
-		return "forward:/egovSampleList.do";
+		return "redirect:/egovSampleList.do";
 	}
 
 	/**
@@ -154,20 +155,19 @@ public class EgovSampleController {
 	 * @return "egovSampleRegister"
 	 * @exception Exception
 	 */
-	@RequestMapping("/updateSampleView.do")
+	@RequestMapping(value="/updateSampleView.do",method=RequestMethod.GET)
 	public String updateSampleView(@RequestParam("selectedId") String id, @ModelAttribute("searchVO") SampleDefaultVO searchVO, Model model) throws Exception {
 		SampleVO sampleVO = new SampleVO();
 		sampleVO.setId(id);
 		sampleVO = selectSample(sampleVO, searchVO);
-		
-		if(!sampleVO.getUsr_pwd().isEmpty()){
+		if(sampleVO.getUsr_pwd() != null){
 			sampleVO.setUsr_pwd("");
 			model.addAttribute(sampleVO);
 			model.addAttribute(searchVO);
 			return "sample/egovSamplePrivate";
 		}
 		
-		model.addAttribute(selectSample(sampleVO, searchVO));
+		model.addAttribute(sampleVO);
 		return "sample/egovSampleRegister";
 	}
 
@@ -216,13 +216,13 @@ public class EgovSampleController {
 	 */
 	@RequestMapping("/updateSample.do")
 	public String updateSample(@ModelAttribute("searchVO") SampleDefaultVO searchVO, SampleVO sampleVO, 
-							   BindingResult bindingResult, Model model, SessionStatus status) throws Exception {
+							   BindingResult bindingResult, Model model, SessionStatus status, @RequestParam String flag) throws Exception {
 		
-		String flagNmsg = validService.Validator(sampleVO);
+		String flagNmsg = validService.Validator(sampleVO, flag);
 		
 		if(!flagNmsg.equalsIgnoreCase("OK")){
 			model.addAttribute("sampleVO", sampleVO);
-			model.addAttribute("errMsg", validService.msgTrans(flagNmsg));
+			model.addAttribute("errMsg", flagNmsg);
 			return "sample/egovSampleRegister";
 		}
 		
@@ -242,14 +242,6 @@ public class EgovSampleController {
 	@RequestMapping("/deleteSample.do")
 	public String deleteSample(SampleVO sampleVO, @ModelAttribute("searchVO") SampleDefaultVO searchVO, 
 							   Model model,	SessionStatus status) throws Exception {
-		
-		String flagNmsg = validService.Validator(sampleVO);
-		
-		if(!flagNmsg.equalsIgnoreCase("OK")){
-			model.addAttribute("sampleVO", sampleVO);
-			model.addAttribute("errMsg", flagNmsg);
-			return "sample/egovSampleRegister";
-		}
 		
 		sampleService.deleteSample(sampleVO);
 		status.setComplete();

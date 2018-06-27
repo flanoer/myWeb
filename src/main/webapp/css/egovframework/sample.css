@@ -17,10 +17,10 @@ p { height:20px; margin:0; padding:5 0 0 0;}
 .check li {list-style-type:none; float:left; margin:0 0 0 0; padding:0 0 0 3px;}
 .top {vertical-align:top;}
 
-a:link { font-size:11px; font-family:"돋움"; color:#3A5870; text-decoration:none; line-height:100%;}
-a:visited { font-size:11px; font-family:"돋움"; color:#3A5870; text-decoration:none}
-a:active { font-size:11px; font-family:"돋움"; color:#339999; text-decoration:none;}
-a:hover { font-size:11px; font-family:"돋움"; color:#339999; text-decoration:none;}
+a:link { font-size:11px; font-family:"돋움"; color:skyblue; text-decoration:none; line-height:100%;}
+a:visited { font-size:11px; font-family:"돋움"; color:skyblue; text-decoration:none}
+a:active { font-size:11px; font-family:"돋움"; color:skyblue; text-decoration:none;}
+a:hover { font-size:11px; font-family:"돋움"; color:black; text-decoration:underline;}
 
 .login {position:relative; margin:0; padding:0 0 0 0px; text-align:left; vertical-align:top; padding:52px 0px 0px 270px; /*overflow:hidden;*/ width:330px; height:260px;background:url(../../images/egovframework/example/login_bg.jpg) 0 0 no-repeat; }
 .login_en {position:relative; margin:0; padding:0 0 0 0px; text-align:left; vertical-align:top; padding:52px 0px 0px 270px; /*overflow:hidden;*/ width:330px; height:260px;background:url(../../images/egovframework/example/login_bg_en.jpg) 0 0 no-repeat; }

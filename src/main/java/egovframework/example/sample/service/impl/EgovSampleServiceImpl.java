@@ -149,4 +149,9 @@ public class EgovSampleServiceImpl extends EgovAbstractServiceImpl implements Eg
 		return flag;
 	}
 
+	@Override
+	public int selectSampleNoticeListTotCnt(SampleDefaultVO searchVO) {
+		return sampleDAO.selectSampleNoticeListTotCnt(searchVO);
+	}
+
 }

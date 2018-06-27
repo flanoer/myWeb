@@ -53,9 +53,6 @@ public class SampleVO extends SampleDefaultVO {
 	/** 비밀번호 */
 	private String usr_pwd;
 	
-	/** 비밀번호 확인 */
-	private String usr_pwd_check;
-	
 	/** 공지 여부 */
 	private String noti_yn;
 	
@@ -111,14 +108,6 @@ public class SampleVO extends SampleDefaultVO {
 
 	public void setUsr_pwd(String usr_pwd) {
 		this.usr_pwd = usr_pwd;
-	}
-
-	public String getUsr_pwd_check() {
-		return usr_pwd_check;
-	}
-
-	public void setUsr_pwd_check(String usr_pwd_check) {
-		this.usr_pwd_check = usr_pwd_check;
 	}
 
 	public String getNoti_yn() {

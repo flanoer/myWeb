@@ -108,4 +108,8 @@ public class SampleDAO extends EgovAbstractDAO {
 		return (Integer) select("sampleDAO.selectSamplePwdCheck", sampleVO);
 	}
 
+	public int selectSampleNoticeListTotCnt(SampleDefaultVO searchVO) {
+		return (Integer) select("sampleDAO.selectSampleNoticeListTotCnt", searchVO);
+	}
+	
 }

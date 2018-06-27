@@ -3,6 +3,7 @@
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt"	   uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
   /**
   * @Class Name : egovSampleList.jsp
@@ -108,14 +109,22 @@
         				<th align="center"><spring:message code="title.sample.description" /></th>
         				<th align="center"><spring:message code="title.sample.regUser" /></th>
         			</tr>
+        			<jsp:useBean id="today" class="java.util.Date" />
+					<fmt:formatDate value='${today}' pattern='yyyy-MM-dd' var="nowDate"/>
         			<c:forEach var="result" items="${resultList}" varStatus="status">
-            			<tr>
-            				<td align="center" class="listtd"><c:out value="${paginationInfo.totalRecordCount+1 - ((searchVO.pageIndex-1) * searchVO.pageSize + status.count)}"/></td>
-            				<td align="center" class="listtd"><a href="javascript:fn_egov_select('<c:out value="${result.id}"/>')"><c:out value="${result.id}"/></a></td>
-            				<td align="left" class="listtd"><c:out value="${result.name}"/>&nbsp;</td>
-            				<td align="center" class="listtd"><c:out value="${result.useYn}"/>&nbsp;</td>
-            				<td align="center" class="listtd"><c:out value="${result.description}"/>&nbsp;</td>
-            				<td align="center" class="listtd"><c:out value="${result.regUser}"/>&nbsp;</td>
+    					<fmt:parseDate value="${result.sdate }" pattern='yyyy-MM-dd' var="sdate"/>
+            			<tr <c:if test="${result.notiYn eq 'Y' and sdate lt today }">style="background-color: grey"</c:if>>
+        					<td align="center" class="listtd" <c:if test="${result.notiYn eq 'Y' and sdate lt today }">style="color:white;"</c:if>>
+          						<c:if test="${result.notiYn eq 'Y' and sdate lt today}" var="flag">공지</c:if>
+         						<c:if test="${not flag}">
+         							<c:out value="${paginationInfo.totalRecordCount+1 - ((searchVO.pageIndex-1) * searchVO.pageSize + status.count)}"/>
+      							</c:if>
+        					</td>
+            				<td align="center" class="listtd" <c:if test="${result.notiYn eq 'Y' and sdate lt today }">style="color:white;"</c:if>><a href="javascript:fn_egov_select('<c:out value="${result.id}"/>')"><c:out value="${result.id}"/></a></td>
+            				<td align="left" class="listtd" <c:if test="${result.notiYn eq 'Y' and sdate lt today }">style="color:white;"</c:if>><c:out value="${result.name}"/>&nbsp;</td>
+            				<td align="center" class="listtd" <c:if test="${result.notiYn eq 'Y' and sdate lt today }">style="color:white;"</c:if>><c:out value="${result.useYn}"/>&nbsp;</td>
+            				<td align="center" class="listtd" <c:if test="${result.notiYn eq 'Y' and sdate lt today }">style="color:white;"</c:if>><c:out value="${result.description}"/>&nbsp;</td>
+            				<td align="center" class="listtd" <c:if test="${result.notiYn eq 'Y' and sdate lt today }">style="color:white;"</c:if>><c:out value="${result.regUser}"/>&nbsp;</td>
             			</tr>
         			</c:forEach>
         		</table>

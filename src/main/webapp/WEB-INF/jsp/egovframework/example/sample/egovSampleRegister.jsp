@@ -71,9 +71,9 @@
     
     <script>
 		/* 자동완성 없애는 거 추가하기 */
+				
 		
 		/* 만료일은 시작일보다 하루 더 뒤부터 선택할 수 있도록 */
-		
 		/* 사용여부에 따라 기간설정 사용유무 */
 		function dp_func(e){
 			if(e.val() == 'Y'){
@@ -87,34 +87,76 @@
 		}
 		
 		$(document).ready(function(){
+			if(${registerFlag == 'modify'}){
+				var sdate = new Date("${sampleVO.sdate}"), edate = new Date("${sampleVO.edate}");
+				$("#sdate").datepicker();/////////////////////
+				$("#sdate").datepicker("setDate",sdate);///////////////////////////
+				$("#sdate").datepicker("option","dateFormat","yy-mm-dd");
+				$("#sdate").datepicker("option","minDate",0).on("change",function(){
+					var date = $(this).datepicker('getDate');
+					date.setDate(date.getDate()+1);
+					$("#edate").datepicker("option","minDate",date);
+				});
+				$("#edate").datepicker();
+				$("#edate").datepicker("setDate",edate);
+				$("#edate").datepicker("option","dateFormat", "yy-mm-dd");	
+			}
+			if(${registerFlag == 'create'}){
+				$("#noti_yn").on("change",function(){
+					$("#sdate").datepicker("option","dateFormat", "yy-mm-dd");	
+					$("#sdate").datepicker("option","minDate",0).on("change",function(){
+						var date = $(this).datepicker('getDate');
+						date.setDate(date.getDate()+1);
+						$("#edate").datepicker("option","minDate",date);
+					});	
+					$("#edate").datepicker("option","dateFormat", "yy-mm-dd"); 
+				});				
+			}
 			if(${empty errMsg}){
-				$("#sdate").datepicker().datepicker("disable");
-				$("#edate").datepicker().datepicker("disable");
-				
+				if(${registerFlag == 'create'} && $("noti_yn").val() == 'N'){
+					$("#sdate").datepicker().datepicker("disable");
+					$("#edate").datepicker().datepicker("disable");
+				}
 				$("#noti_yn").on('change',function(){
 					dp_func($("#noti_yn"));
 				});	
 			}
 			else{//에러메시지가 있을 때
-				if("${errMsg}".indexOf("sd") != 0){
-					dp_func($("#noti_yn"));	
+				if("${errMsg}".indexOf("공") != -1){
+					dp_func($("#noti_yn"));
+					if(${registerFlag == 'create'}){
+						$("#noti_yn").on("change",function(){
+							$("#sdate").datepicker("option","dateFormat", "yy-mm-dd");	
+							$("#sdate").datepicker("option","minDate",0).on("change",function(){
+								var date = $(this).datepicker('getDate');
+								date.setDate(date.getDate()+1);
+								$("#edate").datepicker("option","minDate",date);
+							});	
+							$("#edate").datepicker("option","dateFormat", "yy-mm-dd"); 
+						});				
+					};
 				}
 			}
 		});
 		
 		$(function() {
-			$("#sdate").datepicker();
-			$("#sdate").datepicker("option","dateFormat", "yy-mm-dd");	
-			$("#sdate").datepicker("option","minDate",0).on("change",function(){
-				var date = $(this).datepicker('getDate');
-				date.setDate(date.getDate()+1);
-				$("#edate").datepicker("option","minDate",date);
-			});	
-			$("#edate").datepicker(); 
-			$("#edate").datepicker("option","dateFormat", "yy-mm-dd"); 
+			if(${registerFlag == 'create'}){
+				$("#noti_yn").on("change",function(){
+					$("#sdate").datepicker("option","dateFormat", "yy-mm-dd");	
+					$("#sdate").datepicker("option","minDate",0).on("change",function(){
+						var date = $(this).datepicker('getDate');
+						date.setDate(date.getDate()+1);
+						$("#edate").datepicker("option","minDate",date);
+					});	
+					$("#edate").datepicker("option","dateFormat", "yy-mm-dd"); 
+				});				
+			}
 		});
 		
 		$(document).ready(function(){
+			if($("useYn").val() == "Y"){
+				$("#usr_pwd").attr("disabled","disabled");
+			};
 			$("#useYn").on("change",function(){
 				if($(this).val() == "Y" || $(this).val() == ""){
 					$("#usr_pwd").attr("disabled","disabled");
@@ -217,14 +259,6 @@
     				<form:input path="usr_pwd" cssClass="txt" type="password"/>
     			</td>
     		</tr>
-    		<c:if test="${registerFlag == 'modify' and sampleVO.usr_pwd != null }">
-	    		<tr>
-	    			<td class="tbtd_caption"><label for="usr_pwd_check"><spring:message code="title.sample.usr_pwd_check" /></label></td>
-    				<td class="tbtd_content" colspan="3">
-    				<form:input path="usr_pwd_check" cssClass="txt" type="password"/>
-    			</td>
-	    		</tr>
-    		</c:if>
     	</table>
       </div>
     	<div id="sysbtn">
@@ -261,6 +295,7 @@
             </ul>
     	</div>
     </div>
+    <input type="hidden" name="flag" value='${registerFlag }'/>
     <!-- 검색조건 유지 -->
     <input type="hidden" name="searchCondition" value="<c:out value='${searchVO.searchCondition}'/>"/>
     <input type="hidden" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>"/>

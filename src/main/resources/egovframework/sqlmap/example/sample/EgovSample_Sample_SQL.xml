@@ -81,12 +81,20 @@
     </select>
 
 	<select id="sampleDAO.selectSampleList" parameterClass="searchVO" resultClass="egovMap">
-		SELECT T2.ID, T2.NAME, T2.DESCRIPTION, T2.USE_YN, T2.REG_USER, T2.USR_PWD, T2.SDATE, T2.EDATE, T2.NOTI_YN, ROWNUM FROM(  
-			SELECT ROWNUM RNUM, T1.* FROM(
+		SELECT T1.*, ROWNUM FROM(
+		    SELECT
+		    ID, NAME, DESCRIPTION, USE_YN, REG_USER, USR_PWD, NOTI_YN, SDATE, EDATE 
+		    FROM UTBL
+   <![CDATA[WHERE NOTI_YN = 'Y' AND TO_DATE(SYSDATE) >= TO_DATE(SDATE) AND TO_DATE(SYSDATE) <= TO_DATE(EDATE)]]>
+   			ORDER BY ROWNUM DESC
+		)T1                                  
+		UNION ALL
+		SELECT T2.ID, T2.NAME, T2.DESCRIPTION, T2.USE_YN, T2.REG_USER, T2.USR_PWD, T2.NOTI_YN, T2.SDATE, T2.EDATE, ROWNUM FROM(  
+			SELECT T1.*, ROWNUM RNUM FROM(
 			    SELECT
-			    ID, NAME, DESCRIPTION, USE_YN, REG_USER, USR_PWD, SDATE, EDATE, NOTI_YN
-			    FROM UTBL
-			    WHERE 1=1
+			    ID, NAME, DESCRIPTION, USE_YN, REG_USER, USR_PWD, NOTI_YN, SDATE, EDATE 
+			    FROM UTBL 
+	   <![CDATA[WHERE NOTI_YN = 'N' OR NOTI_YN IS NULL OR TO_DATE(SYSDATE) < TO_DATE(SDATE)]]>
 			    <isEqual prepend="AND" property="searchCondition" compareValue="0">
 					ID LIKE '%' || #searchKeyword# || '%'
 				</isEqual>
@@ -111,5 +119,16 @@
 		</isEqual>
 	</select>
 	
+	<select id="sampleDAO.selectSampleNoticeListTotCnt" parameterClass="searchVO" resultClass="int">
+		SELECT COUNT(*) noticetotcnt
+		FROM UTBL
+<![CDATA[WHERE NOTI_YN = 'Y' AND TO_DATE(SYSDATE) >= TO_DATE(SDATE) AND TO_DATE(SYSDATE) < TO_DATE(EDATE)]]>
+		<isEqual prepend="AND" property="searchCondition" compareValue="0">
+			ID LIKE '%' || #searchKeyword# || '%'
+		</isEqual>
+		<isEqual prepend="AND" property="searchCondition" compareValue="1">
+			NAME LIKE '%' || #searchKeyword# || '%'
+		</isEqual>
+	</select>
 	
 </sqlMap>

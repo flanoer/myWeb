@@ -85,4 +85,6 @@ public interface EgovSampleService {
 
 	int selectSamplePwdCheck(SampleVO sampleVO) throws Exception;
 
+	int selectSampleNoticeListTotCnt(SampleDefaultVO searchVO);
+
 }
