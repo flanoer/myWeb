@@ -62,6 +62,9 @@ public class SampleVO extends SampleDefaultVO {
 	/** 공지 종료일 - 해당 일 00:00 기준 종료*/
 	private String edate;
 	
+	/** 파일 업로드 */
+	private Object fileupload;
+	
 	public String getId() {
 		return id;
 	}
@@ -132,6 +135,14 @@ public class SampleVO extends SampleDefaultVO {
 
 	public void setEdate(String edate) {
 		this.edate = edate;
+	}
+
+	public Object getFileupload() {
+		return fileupload;
+	}
+
+	public void setFileupload(Object fileupload) {
+		this.fileupload = fileupload;
 	}
 
 }

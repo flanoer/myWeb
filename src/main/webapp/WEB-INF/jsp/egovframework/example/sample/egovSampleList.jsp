@@ -37,7 +37,7 @@
         
         /* 글 등록 화면 function */
         function fn_egov_addView() {
-           	document.listForm.action = "<c:url value='/addSample.do'/>";
+           	document.listForm.action = "<c:url value='/addSampleView.do'/>";
            	document.listForm.submit();
         }
         
@@ -59,7 +59,7 @@
 </head>
 
 <body style="text-align:center; margin:0 auto; display:inline; padding-top:100px;">
-    <form:form commandName="searchVO" id="listForm" name="listForm" method="get">
+    <form:form commandName="searchVO" id="listForm" name="listForm" method="POST">
         <input type="hidden" name="selectedId" />
         <div id="content_pop">
         	<!-- 타이틀 -->
@@ -113,6 +113,7 @@
 					<fmt:formatDate value='${today}' pattern='yyyy-MM-dd' var="nowDate"/>
         			<c:forEach var="result" items="${resultList}" varStatus="status">
     					<fmt:parseDate value="${result.sdate }" pattern='yyyy-MM-dd' var="sdate"/>
+    					<fmt:parseDate value="${result.edate }" pattern='yyyy-MM-dd' var="edate"/>
             			<tr <c:if test="${result.notiYn eq 'Y' and sdate lt today }">style="background-color: grey"</c:if>>
         					<td align="center" class="listtd" <c:if test="${result.notiYn eq 'Y' and sdate lt today }">style="color:white;"</c:if>>
           						<c:if test="${result.notiYn eq 'Y' and sdate lt today}" var="flag">공지</c:if>

@@ -16,6 +16,9 @@
 package egovframework.example.sample.service;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Class Name : EgovSampleService.java
@@ -41,7 +44,7 @@ public interface EgovSampleService {
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-	String insertSample(SampleVO vo) throws Exception;
+	String insertSample(SampleVO vo, HttpServletRequest req) throws Exception;
 
 	/**
 	 * 글을 수정한다.
@@ -86,5 +89,7 @@ public interface EgovSampleService {
 	int selectSamplePwdCheck(SampleVO sampleVO) throws Exception;
 
 	int selectSampleNoticeListTotCnt(SampleDefaultVO searchVO);
+
+	Map<String, Object> selectOneFile(String id);
 
 }

@@ -15,8 +15,11 @@
  */
 package egovframework.example.sample.service.impl;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import egovframework.example.cmmn.utils.FileUtils;
 import egovframework.example.sample.service.EgovSampleService;
 import egovframework.example.sample.service.SampleDefaultVO;
 import egovframework.example.sample.service.SampleVO;
@@ -25,10 +28,13 @@ import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 /**
  * @Class Name : EgovSampleServiceImpl.java
@@ -56,6 +62,10 @@ public class EgovSampleServiceImpl extends EgovAbstractServiceImpl implements Eg
 	// TODO ibatis 사용
 	@Resource(name = "sampleDAO")
 	private SampleDAO sampleDAO;
+	
+    @Resource(name="fileUtils")
+    private FileUtils fileUtils;
+	
 	// TODO mybatis 사용
 	//  @Resource(name="sampleMapper")
 	//	private SampleMapper sampleDAO;
@@ -71,14 +81,19 @@ public class EgovSampleServiceImpl extends EgovAbstractServiceImpl implements Eg
 	 * @exception Exception
 	 */
 	@Override
-	public String insertSample(SampleVO vo) throws Exception {
+	public String insertSample(SampleVO vo, HttpServletRequest req) throws Exception {
 		LOGGER.debug(vo.toString());
 
 		/** ID Generation Service */
 		String id = egovIdGnrService.getNextStringId();
 		vo.setId(id);
 		LOGGER.debug(vo.toString());
-
+		
+	    List<Map<String,Object>> list = fileUtils.parseInsertFileInfo(vo, req);
+        for(int i=0, size=list.size(); i<size; i++){
+            sampleDAO.insertFile(list.get(i));
+        }
+        
 		sampleDAO.insertSample(vo);
 		return id;
 	}
@@ -152,6 +167,11 @@ public class EgovSampleServiceImpl extends EgovAbstractServiceImpl implements Eg
 	@Override
 	public int selectSampleNoticeListTotCnt(SampleDefaultVO searchVO) {
 		return sampleDAO.selectSampleNoticeListTotCnt(searchVO);
+	}
+
+	@Override
+	public Map<String, Object> selectOneFile(String id) {
+		return sampleDAO.selectOneFile(id);
 	}
 
 }

@@ -103,13 +103,7 @@
 			}
 			if(${registerFlag == 'create'}){
 				$("#noti_yn").on("change",function(){
-					$("#sdate").datepicker("option","dateFormat", "yy-mm-dd");	
-					$("#sdate").datepicker("option","minDate",0).on("change",function(){
-						var date = $(this).datepicker('getDate');
-						date.setDate(date.getDate()+1);
-						$("#edate").datepicker("option","minDate",date);
-					});	
-					$("#edate").datepicker("option","dateFormat", "yy-mm-dd"); 
+					createDatePick(this); 
 				});				
 			}
 			if(${empty errMsg}){
@@ -126,13 +120,7 @@
 					dp_func($("#noti_yn"));
 					if(${registerFlag == 'create'}){
 						$("#noti_yn").on("change",function(){
-							$("#sdate").datepicker("option","dateFormat", "yy-mm-dd");	
-							$("#sdate").datepicker("option","minDate",0).on("change",function(){
-								var date = $(this).datepicker('getDate');
-								date.setDate(date.getDate()+1);
-								$("#edate").datepicker("option","minDate",date);
-							});	
-							$("#edate").datepicker("option","dateFormat", "yy-mm-dd"); 
+							createDatePick(this); 
 						});				
 					};
 				}
@@ -142,13 +130,7 @@
 		$(function() {
 			if(${registerFlag == 'create'}){
 				$("#noti_yn").on("change",function(){
-					$("#sdate").datepicker("option","dateFormat", "yy-mm-dd");	
-					$("#sdate").datepicker("option","minDate",0).on("change",function(){
-						var date = $(this).datepicker('getDate');
-						date.setDate(date.getDate()+1);
-						$("#edate").datepicker("option","minDate",date);
-					});	
-					$("#edate").datepicker("option","dateFormat", "yy-mm-dd"); 
+					createDatePick(this);
 				});				
 			}
 		});
@@ -167,12 +149,22 @@
 			})
 		});
 		
+		function createDatePick(selector){
+			$("#sdate").datepicker("option","dateFormat", "yy-mm-dd");	
+			$("#sdate").datepicker("option","minDate",0).on("change",function(){
+				var date = $(this).datepicker('getDate');
+				date.setDate(date.getDate()+1);
+				$("#edate").datepicker("option","minDate",date);
+			});	
+			$("#edate").datepicker("option","dateFormat", "yy-mm-dd"); 
+		};
+		
 	</script>
     
 </head>
 <body style="text-align:center; margin:0 auto; display:inline; padding-top:100px;">
 
-<form:form commandName="sampleVO" id="detailForm" name="detailForm" method="post">
+<form:form commandName="sampleVO" id="detailForm" name="detailForm" method="post" enctype="multipart/form-data">
     <div id="content_pop">
     	<!-- 타이틀 -->
     	<div id="title">
@@ -226,6 +218,7 @@
     			</td>
     		</tr>
     		<tr>
+    			<c:if test="">
     			<td class="tbtd_caption"><label for="sdate"><spring:message code="title.sample.sdate" /></label></td>
     			<td class="tbtd_content">
     				<form:input path="sdate" cssClass="txt"/>
@@ -234,6 +227,7 @@
     			<td class="tbtd_content">
     				<form:input path="edate" cssClass="txt"/>
     			</td>
+    			</c:if>
     		</tr>
     		<tr>
     			<td class="tbtd_caption"><label for="description"><spring:message code="title.sample.description" /></label></td>
@@ -258,6 +252,60 @@
     			<td class="tbtd_content" colspan="3">
     				<form:input path="usr_pwd" cssClass="txt" type="password"/>
     			</td>
+    		</tr>
+    		<tr>
+    			<c:if test="${registerFlag == 'create' }" var="regiFlag">
+	    			<td class="tbtd_caption"><label for="fileupload"><spring:message code="title.sample.fileupload" /></label></td>
+	    			<td class="tbtd_content" colspan="3">
+	    				<form:input path="fileupload" type="file"/>
+	    				<span id="preView"></span><br/>
+	    				<img src="#" id="imgView" style="visibility:hidden;width:60%;height:auto;"/>
+	    				<script type="text/javascript">
+		    				function readURL(input) {
+		    					if (input.files && input.files[0]) {
+		    						var reader = new FileReader();
+		    						reader.onload = function(e) {
+		    							$('#imgView').attr('src', e.target.result);
+		    						}
+		    						reader.readAsDataURL(input.files[0]);
+		    						dataType = input.files[0].type;
+		    						if(dataType.indexOf('image') == -1){
+		    							alert("이미지 파일만 업로드 가능합니다!");
+		    							reset($("#file"));
+		    						}
+		    						else{
+		    							$("#imgView").css("visibility","visible");
+		    							$("#preView").html("미리보기");
+		    						}
+		    					}
+		    				}
+		    				
+		    				function reset(selector){
+		    					selector.wrap("<form>").closest("form").get(0).reset();
+		    					selector.unwrap();
+		    				}
+		    				$("#file").change(function() {
+		    					readURL(this);
+		    				});
+	    				</script>
+	    			</td>
+    			</c:if>
+			    <c:if test="${not regiFlag }">
+	    			<td class="tbtd_caption"><label for="fileupload"><spring:message code="title.sample.fileupload" /></label></td>
+	    			<td class="tbtd_content" colspan="3">
+	    				<c:if test="${not empty ori_fname }" var="flag2">
+			    				<img src="<c:url value='/fileUpload/${sampleVO.id }/${sto_fname }'/>" alt="${ori_fname }" style="width:50%; height:auto"/><br/>
+			    				<ul style="list-style-type: none;">
+			    					<li>파일 정보</li>
+			    					<li>파일 이름 : ${ori_fname }</li>	
+			    					<li>파일 크기 : ${fsize } kb</li>
+			    				</ul>
+	    				</c:if>
+	    				<c:if test="${not flag2 }">
+	    					파일에 대한 정보가 존재하지 않습니다.
+	    				</c:if>
+	    			</td>
+    			</c:if>
     		</tr>
     	</table>
       </div>

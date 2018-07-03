@@ -16,6 +16,7 @@
 package egovframework.example.sample.web;
 
 import java.util.List;
+import java.util.Map;
 
 import egovframework.example.sample.service.EgovSampleService;
 import egovframework.example.sample.service.SampleDefaultVO;
@@ -25,7 +26,7 @@ import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 import javax.annotation.Resource;
-import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -116,7 +117,7 @@ public class EgovSampleController {
 	 * @return "egovSampleRegister"
 	 * @exception Exception
 	 */
-	@RequestMapping(value="/addSample.do",method=RequestMethod.GET)
+	@RequestMapping(value="/addSampleView.do",method=RequestMethod.POST)
 	public String addSampleView(@ModelAttribute("searchVO") SampleDefaultVO searchVO, Model model) throws Exception {
 		model.addAttribute("sampleVO", new SampleVO());
 		return "sample/egovSampleRegister";
@@ -132,7 +133,7 @@ public class EgovSampleController {
 	 */
 	@RequestMapping(value="/addSample.do",method=RequestMethod.POST)
 	public String addSample(@ModelAttribute("searchVO") SampleDefaultVO searchVO, 
-							SampleVO sampleVO, BindingResult bindingResult, 
+							SampleVO sampleVO, HttpServletRequest req, 
 							Model model, SessionStatus status, @RequestParam String flag)
 	throws Exception {
 		String flagNmsg = validService.Validator(sampleVO, flag);
@@ -142,7 +143,7 @@ public class EgovSampleController {
 			return "sample/egovSampleRegister";
 		}
 
-		sampleService.insertSample(sampleVO);
+		sampleService.insertSample(sampleVO, req);
 		status.setComplete();
 		return "redirect:/egovSampleList.do";
 	}
@@ -155,8 +156,10 @@ public class EgovSampleController {
 	 * @return "egovSampleRegister"
 	 * @exception Exception
 	 */
-	@RequestMapping(value="/updateSampleView.do",method=RequestMethod.GET)
-	public String updateSampleView(@RequestParam("selectedId") String id, @ModelAttribute("searchVO") SampleDefaultVO searchVO, Model model) throws Exception {
+	@RequestMapping(value="/updateSampleView.do")
+	public String updateSampleView(@RequestParam("selectedId") String id, 
+								   @ModelAttribute("searchVO") SampleDefaultVO searchVO, 
+								   Model model) throws Exception {
 		SampleVO sampleVO = new SampleVO();
 		sampleVO.setId(id);
 		sampleVO = selectSample(sampleVO, searchVO);
@@ -167,7 +170,10 @@ public class EgovSampleController {
 			return "sample/egovSamplePrivate";
 		}
 		
+		model = fileInfo(model, sampleVO.getId());
+		
 		model.addAttribute(sampleVO);
+		
 		return "sample/egovSampleRegister";
 	}
 
@@ -180,6 +186,7 @@ public class EgovSampleController {
 		
 //		model attribute 어노테이션을 통해 담겨져온 sampleVO의 id, pwd 와 id로 조회한 결과값 일치 여부 확인
 		if(flag == 1){
+			model = fileInfo(model, sampleVO.getId());
 			model.addAttribute(selectSample(sampleVO, searchVO));
 			return "sample/egovSampleRegister";
 		}
@@ -204,6 +211,19 @@ public class EgovSampleController {
 	
 	public int selectSamplePwdCheck(SampleVO sampleVO, @ModelAttribute("searchVO") SampleDefaultVO searchVO) throws Exception {
 		return sampleService.selectSamplePwdCheck(sampleVO);
+	}
+	
+	public Model fileInfo(Model model, String id) throws Exception {
+		Map<String,Object> fileInfo = sampleService.selectOneFile(id);
+		if(fileInfo != null){
+			String ori_fname = String.valueOf(fileInfo.get("ORI_FNAME"));
+			String sto_fname = String.valueOf(fileInfo.get("STO_FNAME"));
+			String fsize = String.valueOf(fileInfo.get("FSIZE"));
+			model.addAttribute("ori_fname",ori_fname);
+			model.addAttribute("sto_fname",sto_fname);
+			model.addAttribute("fsize",fsize);
+		}
+		return model;
 	}
 
 	/**

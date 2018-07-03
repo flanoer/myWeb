@@ -16,6 +16,7 @@
 package egovframework.example.sample.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import egovframework.example.sample.service.SampleDefaultVO;
 import egovframework.example.sample.service.SampleVO;
@@ -110,6 +111,15 @@ public class SampleDAO extends EgovAbstractDAO {
 
 	public int selectSampleNoticeListTotCnt(SampleDefaultVO searchVO) {
 		return (Integer) select("sampleDAO.selectSampleNoticeListTotCnt", searchVO);
+	}
+	
+	public void insertFile(Map<String, Object> map){
+		insert("sampleDAO.insertFile", map);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> selectOneFile(String id) {
+		return (Map<String,Object>)select("sampleDAO.selectOneFile", id);
 	}
 	
 }
