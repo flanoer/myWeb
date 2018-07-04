@@ -15,15 +15,15 @@
  */
 package egovframework.example.sample.service.impl;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import egovframework.example.cmmn.utils.FileUtils;
+import egovframework.example.cmmn.utils.WordCheckUtils;
 import egovframework.example.sample.service.EgovSampleService;
 import egovframework.example.sample.service.SampleDefaultVO;
 import egovframework.example.sample.service.SampleVO;
-
+import egovframework.example.sample.service.ValidationService;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 
@@ -33,8 +33,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 /**
  * @Class Name : EgovSampleServiceImpl.java
@@ -65,6 +63,9 @@ public class EgovSampleServiceImpl extends EgovAbstractServiceImpl implements Eg
 	
     @Resource(name="fileUtils")
     private FileUtils fileUtils;
+
+    @Resource(name="validService")
+    private ValidationService validService;
 	
 	// TODO mybatis 사용
 	//  @Resource(name="sampleMapper")
@@ -84,6 +85,16 @@ public class EgovSampleServiceImpl extends EgovAbstractServiceImpl implements Eg
 	public String insertSample(SampleVO vo, HttpServletRequest req) throws Exception {
 		LOGGER.debug(vo.toString());
 
+		int flag1, flag2, flag3;
+		flag1 = wordCheckByFormField(vo.getName());
+		flag2 = wordCheckByFormField(vo.getDescription());
+		flag3 = wordCheckByFormField(vo.getRegUser());
+		int result = 0;
+		result = flag1+flag2+flag3;
+		if(result >= 1){
+			return String.valueOf(result);
+		}
+		
 		/** ID Generation Service */
 		String id = egovIdGnrService.getNextStringId();
 		vo.setId(id);
@@ -95,9 +106,20 @@ public class EgovSampleServiceImpl extends EgovAbstractServiceImpl implements Eg
         }
         
 		sampleDAO.insertSample(vo);
-		return id;
+		return String.valueOf(result);
 	}
-
+	
+	public int wordCheckByFormField(String str){
+		
+		String chars = validService.wordSplit(str);
+		int isWrong = 0;
+		if(isWrong == 0){
+			isWrong = sampleDAO.checkWord(chars);
+		}
+		
+		return isWrong;
+	}
+	
 	/**
 	 * 글을 수정한다.
 	 * @param vo - 수정할 정보가 담긴 SampleVO

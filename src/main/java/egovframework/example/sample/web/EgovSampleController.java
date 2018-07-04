@@ -143,7 +143,16 @@ public class EgovSampleController {
 			return "sample/egovSampleRegister";
 		}
 
-		sampleService.insertSample(sampleVO, req);
+		String result = sampleService.insertSample(sampleVO, req);
+		if(Integer.parseInt(result) >= 1){
+			sampleVO.setName("");
+			sampleVO.setDescription("");
+			sampleVO.setRegUser("");
+			model.addAttribute("sampleVO", sampleVO);
+			model.addAttribute("errMsg", "게시물에 욕설을 사용할 수 없습니다.");
+			return "sample/egovSampleRegister";
+		}
+		
 		status.setComplete();
 		return "redirect:/egovSampleList.do";
 	}

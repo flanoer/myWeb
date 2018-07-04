@@ -121,5 +121,9 @@ public class SampleDAO extends EgovAbstractDAO {
 	public Map<String, Object> selectOneFile(String id) {
 		return (Map<String,Object>)select("sampleDAO.selectOneFile", id);
 	}
+
+	public int checkWord(String character) {
+		return (Integer) select("sampleDAO.checkWord", character);
+	}
 	
 }

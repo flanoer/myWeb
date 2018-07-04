@@ -1,5 +1,9 @@
 package egovframework.example.sample.service.impl;
 
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -18,6 +22,7 @@ public class ValidationServiceImpl implements ValidationService{
 	
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EgovSampleServiceImpl.class);
+	private static final String DELIMITERS = " ,;/'\"\n\r.~!?@#$%^&*()+|-=`[]";
 
 	String msg = "OK";
 	
@@ -65,6 +70,20 @@ public class ValidationServiceImpl implements ValidationService{
 				return flagNmsg;	
 			default: return flagNmsg;
 		}
+	}
+	
+	@Override
+	public String wordSplit(String inputword){
+		
+		String word = new String();
+		
+		StringTokenizer st = new StringTokenizer(inputword, DELIMITERS, false);
+		
+		while(st.hasMoreElements()){
+			word += st.nextToken();
+		}
+		
+		return word;
 	}
 
 }

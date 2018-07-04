@@ -240,12 +240,13 @@
     			<td class="tbtd_content" colspan="3">
                     <c:if test="${registerFlag == 'modify'}">
         				<form:input path="regUser" maxlength="10" cssClass="essentiality" readonly="true" />
-        				&nbsp;</td>
+        				&nbsp;
                     </c:if>
                     <c:if test="${registerFlag != 'modify'}">
         				<form:input path="regUser" maxlength="10" cssClass="txt"  />
-        				&nbsp;</td>
+        				&nbsp;
                     </c:if>
+                </td>
     		</tr>
     		<tr>
     			<td class="tbtd_caption"><label for="usr_pwd"><spring:message code="title.sample.usr_pwd" /></label></td>

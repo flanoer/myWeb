@@ -150,4 +150,8 @@
 		WHERE REGI_ID = #id#
 	</select>
 	
+	<select id="sampleDAO.checkWord" parameterClass="java.lang.String" resultClass="int">
+		SELECT COUNT(*) FROM FORBID_WORD WHERE WRONG_WORD LIKE '%' || #character# || '%'
+	</select>
+	
 </sqlMap>
