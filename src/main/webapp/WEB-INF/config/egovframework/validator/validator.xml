@@ -17,6 +17,15 @@
         		<arg0 key="title.sample.regUser" />
 			</field>
         </form>
+        
+        <form name="memberVO">
+        	<field property="member_id" depends="required">
+        		<arg0 key="title.sample.member_id" />
+			</field>
+			<field property="member_pwd" depends="required">
+                <arg0 key="title.sample.member_pwd" />
+            </field>
+        </form>
     </formset>
 
 </form-validation>

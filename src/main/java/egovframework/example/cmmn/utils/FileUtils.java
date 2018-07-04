@@ -22,7 +22,7 @@ public class FileUtils {
     	String regi_id = vo.getId();
     	
     	String filePath = req.getSession().getServletContext().getRealPath("/")+"\\fileUpload\\"+regi_id+"\\";
-    	System.out.println("파일 주소1 : "+req.getSession().getServletContext()+"\\fileUpload\\"+regi_id+"\\");
+    	System.out.println("파일 주소1 : "+req.getSession().getServletContext().getContextPath()+"\\fileUpload\\"+regi_id+"\\");
     	System.out.println("파일 주소2 : "+req.getSession().getServletContext().getRealPath("/")+"\\fileUpload\\"+regi_id+"\\");
     	
         MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest)req;

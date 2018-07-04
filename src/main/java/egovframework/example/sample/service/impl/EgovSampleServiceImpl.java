@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import egovframework.example.cmmn.utils.FileUtils;
-import egovframework.example.cmmn.utils.WordCheckUtils;
 import egovframework.example.sample.service.EgovSampleService;
 import egovframework.example.sample.service.SampleDefaultVO;
 import egovframework.example.sample.service.SampleVO;
