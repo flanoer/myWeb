@@ -1,7 +1,5 @@
 package egovframework.example.member.service;
 
-import egovframework.example.sample.service.MemberVO;
-
 public interface EgovMemberService {
 	
 	/**
@@ -11,5 +9,7 @@ public interface EgovMemberService {
 	 * @exception Exception
 	 */
 	void insertMember(MemberVO vo) throws Exception;
+	
+	int memberCheck(MemberVO vo) throws Exception;
 	
 }

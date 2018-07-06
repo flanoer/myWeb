@@ -33,16 +33,16 @@
     
     <script type="text/javaScript" language="javascript" defer="defer">
         <!--
-        /* 로그인 function */
-        function fn_egov_login() {
-           	document.loginForm.action = "<c:url value='/egovMemberLogin.do'/>";
-           	document.loginForm.submit();
-        }
         
-        /* 회원가입 function */
+        /* 글 보기 function */
         function fn_egov_join() {
-        	document.loginForm.action = "<c:url value='/egovMemberJoining.do'/>";
-        	document.loginForm.submit();
+        	frm = document.joinForm;
+        	if(!validateMemberVO(frm)){
+                return;
+            }else{
+            	frm.action = "<c:url value='/egovMemberJoined.do'/>";
+            	frm.submit();
+            }
         }
         -->
         
@@ -53,7 +53,7 @@
 </head>
 <body style="text-align:center; margin:0 auto; display:inline; padding-top:100px;">
 
-<form:form commandName="memberVO" id="loginForm" name="loginForm" method="post">
+<form:form commandName="memberVO" id="joinForm" name="joinForm" method="post">
     <div id="content_pop">
     	<!-- 타이틀 -->
     	<div id="title">
@@ -73,13 +73,19 @@
     		<tr>
        			<td class="tbtd_caption"><label for="member_id"><spring:message code="title.member.member_id" /></label></td>
        			<td class="tbtd_content">
-       				<form:input path="member_id" type="text" maxlength="20"/><form:errors path="member_id"/> 
+       				<form:input path="member_id" type="text" maxlength="20"/><form:errors path="member_id" />
        			</td>
        		</tr>
        		<tr>
        			<td class="tbtd_caption"><label for="member_pwd"><spring:message code="title.member.member_pwd" /></label></td>
        			<td class="tbtd_content">
-       				<form:input path="member_pwd" type="password" maxlength="10"/><form:errors path="member_pwd"/>
+       				<form:input path="member_pwd" type="password" maxlength="10"/><form:errors path="member_pwd" />
+       			</td>
+       		</tr>
+       		<tr>
+       			<td class="tbtd_caption"><label for="member_email"><spring:message code="title.member.member_email" /></label></td>
+       			<td class="tbtd_content">
+       				<form:input path="member_email" type="text" maxlength="30"/><form:errors path="member_email" />
        			</td>
        		</tr>
     	</table>
@@ -88,14 +94,8 @@
     		<ul>
     			<li>
                     <span class="btn_blue_l">
-                        <a href="javascript:fn_egov_login();"><spring:message code="button.login" /></a>
-                        <img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" style="margin-left:6px;" alt=""/>
-                    </span>
-                </li>
-    			<li>
-                    <span class="btn_blue_l">
                         <a href="javascript:fn_egov_join();">
-                            <spring:message code="button.join" />
+                            <spring:message code="button.complete" />
                         </a>
                         <img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" style="margin-left:6px;" alt=""/>
                     </span>

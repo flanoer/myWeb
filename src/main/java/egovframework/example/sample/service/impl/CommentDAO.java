@@ -13,11 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package egovframework.example.sample.service;
+package egovframework.example.sample.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import egovframework.example.sample.service.CommentVO;
+
+import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
+
+import org.springframework.stereotype.Repository;
 
 /**
- * @Class Name : MemberVO.java
- * @Description : MemberVO Class
+ * @Class Name : SampleDAO.java
+ * @Description : Sample DAO Class
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -31,41 +40,16 @@ package egovframework.example.sample.service;
  *
  *  Copyright (C) by MOPAS All right reserved.
  */
-public class MemberVO {
 
-	/** 아이디 */
-	private String member_id;
+@Repository("commentDAO")
+public class CommentDAO extends EgovAbstractDAO {
 
-	/** 비밀번호 */
-	private String member_pwd;
-
-	/** 이메일 주소 */
-	private String member_email;
-
+	public List<CommentVO> selectCommentByOriRecID(String orirec_id) throws Exception {
+		return (List<CommentVO>) list("sampleDAO.selectCommentByOriRecID", orirec_id);
+	}
 	
-	
-	public String getMember_id() {
-		return member_id;
-	}
-
-	public void setMember_id(String member_id) {
-		this.member_id = member_id;
-	}
-
-	public String getMember_pwd() {
-		return member_pwd;
-	}
-
-	public void setMember_pwd(String member_pwd) {
-		this.member_pwd = member_pwd;
-	}
-
-	public String getMember_email() {
-		return member_email;
-	}
-
-	public void setMember_email(String member_email) {
-		this.member_email = member_email;
+	public void insertComment(CommentVO cvo) throws Exception {
+		insert("sampleDAO.insertComment", cvo);
 	}
 	
 }

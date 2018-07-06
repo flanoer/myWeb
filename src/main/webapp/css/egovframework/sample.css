@@ -60,13 +60,14 @@ a:hover { font-size:11px; font-family:"돋움"; color:black; text-decoration:und
 #title {float:left; text-align:left; margin:0 0 10 0; padding:0; height:30px; border-bottom:1px solid #e5e5e5; width:680px;}
 #title ul {float:left; margin:0; padding:0;}
 #title li {list-style-type:none; width:200px; padding:3px 0px 2px 0px; float:left; font-family:"돋움"; font-size:16px; font-weight:bold; color:#000000;}
+#title div{float:right; margin:0; padding:0;}
 #title .location {float:right; height:20px; margin:0; padding:5 0 0 0; font-family:"돋움"; font-size:11px;}
 #foot {margin:0; padding:0 0 0 0; text-align:left; /*overflow:hidden;*/ height:40px; clear:both; background-color:#F7F7F7; border-top:1px solid #e5e5e5; font-family:Tahoma; font-size:11px; color:#999999;}
-#search {float:right; margin:0; padding:10px 0 10px 0; width:680px;}
+#search {float:right; margin:0; padding:10px 0 10px 0; width:auto;}
 #search ul {margin:0; float:right;}
 #search li {list-style-type:none; float:left; margin:0 0 0 0; padding:0 0 0 3px;}
 #table {float:left; margin:0 0 10px 0; padding:0 0 0 0; width:680px;}
-#paging {padding:0 0 0 0; text-align:center; width:680px;}
+#paging {float:left; padding:0 0 0 0; text-align:center; width:680px;}
 #paging ul {display:inline;}
 #paging li {display:inline; list-style-type:none; padding:0 10px 0 10px; font-family: Tahoma; font-size:11px; color: #333333;}
 #paging li.pre10 {padding:0 2px 0 2px;}

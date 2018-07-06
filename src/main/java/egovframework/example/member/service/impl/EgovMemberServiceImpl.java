@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.example.member.service.EgovMemberService;
-import egovframework.example.sample.service.MemberVO;
+import egovframework.example.member.service.MemberVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 @Service("memberService")
@@ -21,6 +21,11 @@ public class EgovMemberServiceImpl extends EgovAbstractServiceImpl implements Eg
 	@Override
 	public void insertMember(MemberVO vo) throws Exception {
 		memberDAO.insertMember(vo);
+	}
+
+	@Override
+	public int memberCheck(MemberVO vo) throws Exception {
+		return memberDAO.memberCheck(vo);
 	}
 	
 	

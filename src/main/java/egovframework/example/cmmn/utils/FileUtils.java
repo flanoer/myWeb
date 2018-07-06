@@ -27,7 +27,7 @@ public class FileUtils {
     	
         MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest)req;
         Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
-         
+        
         MultipartFile multipartFile = null;
         String originalFileName = null;
         String originalFileExtension = null;

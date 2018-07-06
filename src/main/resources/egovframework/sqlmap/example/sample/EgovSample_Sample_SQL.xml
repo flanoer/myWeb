@@ -17,6 +17,14 @@
 		<result property="edate" column="edate"/>
 		<result property="noti_yn" column="noti_yn"/>
 	</resultMap>
+	
+	<resultMap id="comment" class="egovframework.example.sample.service.CommentVO">
+		<result property="comment_id" column="comment_id"/>
+		<result property="orirec_id" column="orirec_id"/>
+		<result property="cmt_content" column="cmt_content"/>
+		<result property="regi_id" column="regi_id"/>
+		<result property="regidate" column="regidate"/>
+	</resultMap>
 
 	<insert id="sampleDAO.insertSample">
 		<![CDATA[
@@ -153,5 +161,20 @@
 	<select id="sampleDAO.checkWord" parameterClass="java.lang.String" resultClass="int">
 		SELECT COUNT(*) FROM FORBID_WORD WHERE WRONG_WORD LIKE '%' || #character# || '%'
 	</select>
+	
+	<select id="sampleDAO.selectCommentByOriRecID" parameterClass="java.lang.String" resultMap="comment">
+		SELECT * FROM U_COMMENT_TBL WHERE ORIREC_ID = #orirec_id#
+	</select>
+	
+	<insert id="sampleDAO.insertComment">
+		INSERT INTO U_COMMENT_TBL 
+		VALUES(
+			SEQ_U_CMT_TBL_COMMENT_ID.NEXTVAL,
+			#orirec_id#,
+			#cmt_content#,
+			#regi_id#,
+			DEFAULT
+		)
+	</insert>
 	
 </sqlMap>

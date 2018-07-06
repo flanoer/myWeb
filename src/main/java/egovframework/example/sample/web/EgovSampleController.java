@@ -15,9 +15,13 @@
  */
 package egovframework.example.sample.web;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import egovframework.example.sample.service.CommentVO;
+import egovframework.example.sample.service.EgovCommentService;
 import egovframework.example.sample.service.EgovSampleService;
 import egovframework.example.sample.service.SampleDefaultVO;
 import egovframework.example.sample.service.SampleVO;
@@ -27,7 +31,12 @@ import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -36,6 +45,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springmodules.validation.commons.DefaultBeanValidator;
 
@@ -73,6 +83,9 @@ public class EgovSampleController {
 
 	@Resource(name="validService")
 	protected ValidationService validService;
+	
+	@Resource(name="commentService")
+	private EgovCommentService commentService;
 	
 	/**
 	 * 글 목록을 조회한다. (pageing)
@@ -118,8 +131,12 @@ public class EgovSampleController {
 	 * @exception Exception
 	 */
 	@RequestMapping(value="/addSampleView.do",method=RequestMethod.POST)
-	public String addSampleView(@ModelAttribute("searchVO") SampleDefaultVO searchVO, Model model) throws Exception {
-		model.addAttribute("sampleVO", new SampleVO());
+	public String addSampleView(@ModelAttribute("searchVO") SampleDefaultVO searchVO, 
+								SampleVO sampleVO, Model model,
+								@RequestParam("regUser") String regUser) throws Exception {
+		sampleVO = new SampleVO();
+		sampleVO.setRegUser(regUser);
+		model.addAttribute("sampleVO", sampleVO);
 		return "sample/egovSampleRegister";
 	}
 
@@ -131,6 +148,7 @@ public class EgovSampleController {
 	 * @return "forward:/egovSampleList.do"
 	 * @exception Exception
 	 */
+	
 	@RequestMapping(value="/addSample.do",method=RequestMethod.POST)
 	public String addSample(@ModelAttribute("searchVO") SampleDefaultVO searchVO, 
 							SampleVO sampleVO, HttpServletRequest req, 
@@ -277,4 +295,45 @@ public class EgovSampleController {
 		return "forward:/egovSampleList.do";
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value="/commentList.do",produces="application/json; charset=utf8")
+	@ResponseBody
+	public ResponseEntity commentList(@ModelAttribute("CommentVO") CommentVO cvo, HttpServletRequest request)
+	throws Exception{
+		
+		HttpHeaders responseHeaders = new HttpHeaders();
+        ArrayList<HashMap> hmlist = new ArrayList<HashMap>();
+        
+     // 해당 게시물 댓글
+        List<CommentVO> commentVO = commentService.selectCommentByOriRecID(cvo.getOrirec_id());
+        
+        if(commentVO.size() > 0){
+            for(int i=0; i<commentVO.size(); i++){
+                HashMap hm = new HashMap();
+                hm.put("cmt_content", commentVO.get(i).getCmt_content());
+                hm.put("regi_id", commentVO.get(i).getRegi_id());
+                hm.put("regidate", commentVO.get(i).getRegidate());
+                
+                hmlist.add(hm);
+            }
+            
+        }
+        
+        JSONArray json = new JSONArray(hmlist);
+        System.out.println(json.toString());
+        return new ResponseEntity(json.toString(), responseHeaders, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value="/insertComment.do")
+    @ResponseBody
+    public String insertComment(@ModelAttribute("CommentVO") CommentVO cvo, HttpSession session) throws Exception{
+        
+    	cvo.setRegi_id((String)session.getAttribute("regUser"));
+    	if(session.getAttribute("regUser") == null){
+    		return "error";
+    	}
+        commentService.insertComment(cvo);
+        
+        return "success";
+    }
 }

@@ -20,4 +20,8 @@
 		]]>
 	</insert>
 	
+	<select id="memberDAO.memberCheck" resultClass="int">
+		SELECT COUNT(*) FROM U_MEMBER_TBL
+		WHERE MEMBER_ID = #member_id# AND MEMBER_PWD = #member_pwd#
+	</select>
 </sqlMap>

@@ -238,14 +238,16 @@
     		<tr>
     			<td class="tbtd_caption"><label for="regUser"><spring:message code="title.sample.regUser" /></label></td>
     			<td class="tbtd_content" colspan="3">
-                    <c:if test="${registerFlag == 'modify'}">
-        				<form:input path="regUser" maxlength="10" cssClass="essentiality" readonly="true" />
-        				&nbsp;
-                    </c:if>
-                    <c:if test="${registerFlag != 'modify'}">
-        				<form:input path="regUser" maxlength="10" cssClass="txt"  />
-        				&nbsp;
-                    </c:if>
+    				<c:if test="${registerFlag == 'modify' }">
+	                    <c:if test="${not empty sessionScope.regUser and sessionScope.regUser == sampleVO.regUser}" var="isMember">
+	        				<form:input path="regUser" maxlength="10" cssClass="essentiality" readonly="true" />
+	        				&nbsp;
+	                    </c:if>
+	       				<c:if test="${not isMember }">
+	       					<form:input path="regUser" maxlength="10" cssClass="essentiality" readonly="true" />
+	       					&nbsp;
+	       				</c:if>
+       				</c:if>
                 </td>
     		</tr>
     		<tr>
@@ -350,5 +352,6 @@
     <input type="hidden" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>"/>
     <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 </form:form>
+<jsp:include page="egovCommentPage.jsp"></jsp:include>
 </body>
 </html>

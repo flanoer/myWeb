@@ -54,6 +54,23 @@
            	document.listForm.submit();
         }
         
+        /* 로그아웃 function */
+        function fn_egov_logout(){
+        	document.listForm.action ="<c:url value='/egovMemberLogout.do'/>";
+        	document.listForm.submit();
+        }
+        
+        /* 로그인 function */
+        function fn_egov_login() {
+           	document.listForm.action = "<c:url value='/egovMember.do'/>";
+           	document.listForm.submit();
+        }
+        
+        /* 회원가입 function */
+        function fn_egov_join() {
+        	document.listForm.action = "<c:url value='/egovMemberJoining.do'/>";
+        	document.listForm.submit();
+        }
         //-->
     </script>
 </head>
@@ -61,14 +78,26 @@
 <body style="text-align:center; margin:0 auto; display:inline; padding-top:100px;">
     <form:form commandName="searchVO" id="listForm" name="listForm" method="post">
         <input type="hidden" name="selectedId" />
+        <input type="hidden" name="regUser" value="${sessionScope.regUser }"/>
         <div id="content_pop">
         	<!-- 타이틀 -->
         	<div id="title">
         		<ul>
         			<li><img src="<c:url value='/images/egovframework/example/title_dot.gif'/>" alt=""/><spring:message code="list.sample" /></li>
         		</ul>
+        		
         	</div>
         	<!-- // 타이틀 -->
+        	<div id="member" style="position:absolute; float:left; width:680px; height:30px; text-align:right; margin:10 0 10 0; padding:0;">
+	        	<c:if test="${not empty sessionScope.regUser }" var="isMember">
+	        		${sessionScope.regUser }님의 방문을 환영합니다.&nbsp;&nbsp;
+        			<a href="javascript:fn_egov_logout();"><spring:message code="button.logout" /></a>
+	        	</c:if>
+	        	<c:if test="${not isMember }">
+	        		<a href="javascript:fn_egov_login();"><spring:message code="button.login"/></a>
+	        		<a href="javascript:fn_egov_join();"><spring:message code="button.join"/></a>
+	        	</c:if>
+       		</div>
         	<div id="search">
         		<ul>
         			<li>
@@ -84,7 +113,7 @@
         			<li>
         	            <span class="btn_blue_l">
         	                <a href="javascript:fn_egov_selectList();"><spring:message code="button.search" /></a>
-        	                <img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" style="margin-left:6px;" alt=""/>
+        	                <img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" style="margin-left:7px;" alt=""/>
         	            </span>
         	        </li>
                 </ul>
@@ -131,7 +160,7 @@
         		</table>
         	</div>
         	<!-- /List -->
-        	<div id="paging">
+        	<div id="paging" style="float:left">
         		<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
         		<form:hidden path="pageIndex" />
         	</div>
