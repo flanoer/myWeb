@@ -65,6 +65,9 @@ public class SampleVO extends SampleDefaultVO {
 	/** 파일 업로드 */
 	private Object fileupload;
 	
+	/** 댓글 수*/
+	private String cmt_count;
+	
 	public String getId() {
 		return id;
 	}
@@ -143,6 +146,14 @@ public class SampleVO extends SampleDefaultVO {
 
 	public void setFileupload(Object fileupload) {
 		this.fileupload = fileupload;
+	}
+
+	public String getCmt_count() {
+		return cmt_count;
+	}
+
+	public void setCmt_count(String cmt_count) {
+		this.cmt_count = cmt_count;
 	}
 
 }

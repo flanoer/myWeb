@@ -164,8 +164,8 @@
 </head>
 <body style="text-align:center; margin:0 auto; display:inline; padding-top:100px;">
 
-<form:form commandName="sampleVO" id="detailForm" name="detailForm" method="post" enctype="multipart/form-data">
     <div id="content_pop">
+	<form:form commandName="sampleVO" id="detailForm" name="detailForm" method="post" enctype="multipart/form-data">
     	<!-- 타이틀 -->
     	<div id="title">
     		<ul>
@@ -345,13 +345,13 @@
                 </li>
             </ul>
     	</div>
+	    <input type="hidden" name="flag" value='${registerFlag }'/>
+	    <!-- 검색조건 유지 -->
+	    <input type="hidden" name="searchCondition" value="<c:out value='${searchVO.searchCondition}'/>"/>
+	    <input type="hidden" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>"/>
+	    <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
+	</form:form>
+	<jsp:include page="egovCommentPage.jsp"></jsp:include>
     </div>
-    <input type="hidden" name="flag" value='${registerFlag }'/>
-    <!-- 검색조건 유지 -->
-    <input type="hidden" name="searchCondition" value="<c:out value='${searchVO.searchCondition}'/>"/>
-    <input type="hidden" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>"/>
-    <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
-</form:form>
-<jsp:include page="egovCommentPage.jsp"></jsp:include>
 </body>
 </html>

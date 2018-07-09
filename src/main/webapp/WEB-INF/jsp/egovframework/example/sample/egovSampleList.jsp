@@ -150,7 +150,7 @@
          							<c:out value="${paginationInfo.totalRecordCount+1 - ((searchVO.pageIndex-1) * searchVO.pageSize + status.count)}"/>
       							</c:if>
         					</td>
-            				<td align="center" class="listtd" <c:if test="${result.notiYn eq 'Y' and sdate lt today }">style="color:white;"</c:if>><a href="javascript:fn_egov_select('<c:out value="${result.id}"/>')"><c:out value="${result.id}"/></a></td>
+            				<td align="center" class="listtd" <c:if test="${result.notiYn eq 'Y' and sdate lt today }">style="color:white;"</c:if>><a href="javascript:fn_egov_select('<c:out value="${result.id}"/>')"><c:out value="${result.id}"/>[<c:out value="${result.cmtCount eq null ? '0' : result.cmtCount}"/>]</a></td>
             				<td align="left" class="listtd" <c:if test="${result.notiYn eq 'Y' and sdate lt today }">style="color:white;"</c:if>><c:out value="${result.name}"/>&nbsp;</td>
             				<td align="center" class="listtd" <c:if test="${result.notiYn eq 'Y' and sdate lt today }">style="color:white;"</c:if>><c:out value="${result.useYn}"/>&nbsp;</td>
             				<td align="center" class="listtd" <c:if test="${result.notiYn eq 'Y' and sdate lt today }">style="color:white;"</c:if>><c:out value="${result.description}"/>&nbsp;</td>

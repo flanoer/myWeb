@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import egovframework.example.sample.service.CommentVO;
-
+import egovframework.example.sample.service.SampleVO;
 import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
 
 import org.springframework.stereotype.Repository;
@@ -50,6 +50,10 @@ public class CommentDAO extends EgovAbstractDAO {
 	
 	public void insertComment(CommentVO cvo) throws Exception {
 		insert("sampleDAO.insertComment", cvo);
+	}
+
+	public void updateRecordCmtCount(SampleVO vo) {
+		update("sampleDAO.updateRecordCmtCount", vo);
 	}
 	
 }

@@ -23,7 +23,7 @@
 <!--For Commons Validator Client Side-->
 <script type="text/javascript" src="<c:url value='/cmmn/validator.do'/>"></script>
 <validator:javascript formName="commentVO" staticJavascript="false" xhtml="true" cdata="false"/>
-
+<div style="float:left;">
 <script type="text/javaScript" language="javascript" defer="defer">
     <!--
     /* 글 목록 화면 function */
@@ -55,7 +55,6 @@
        	alert("${errMsg}");
     }
 </script>
-<div id="content_pop">
 	<form id="commentForm" name="commentForm" method="post">
 		<br/>
 		<br/>
@@ -64,7 +63,7 @@
 				<span><strong>Comments</strong></span> <span id="comment_Count"></span>
 			</div>
 			<div>
-				<table width="100%" border="1" cellpadding="0" cellspacing="0" style="bordercolor: #D3E2EC; bordercolordark: #FFFFFF; BORDER-TOP: #C2D0DB 2px solid; BORDER-LEFT: #ffffff 1px solid; BORDER-RIGHT: #ffffff 1px solid; BORDER-BOTTOM: #C2D0DB 1px solid; border-collapse: collapse;">
+				<table width="680px" border="1" cellpadding="0" cellspacing="0" style="bordercolor: #D3E2EC; bordercolordark: #FFFFFF; BORDER-TOP: #C2D0DB 2px solid; BORDER-LEFT: #ffffff 1px solid; BORDER-RIGHT: #ffffff 1px solid; BORDER-BOTTOM: #C2D0DB 1px solid; border-collapse: collapse;">
 					<tr>
 						<td><textarea id="cmt_content" name="cmt_content" style="width: 660px" rows="3" cols="30" placeholder="댓글을 입력하세요"></textarea>
 							<br/>
@@ -85,7 +84,6 @@
 			<div id="commentList"></div>
 		</form>
 	</div>
-</div>
 <script type="text/javascript">
 	/*
 	 * 댓글 등록하기(Ajax)
@@ -138,7 +136,7 @@
 	                
 	                for(i=0; i<data.length; i++){
 	                    html += "<div>";
-	                    html += "<div><table class='table'><h6><strong>"+data[i].regi_id+"</strong></h6>";
+	                    html += "<div><table><h6><strong>"+data[i].regi_id+"님이 "+data[i].regidate+"에 작성한 댓글 입니다.</strong></h6>";
 	                    html += data[i].cmt_content + "<tr><td></td></tr>";
 	                    html += "</table></div>";
 	                    html += "</div>";
@@ -147,7 +145,7 @@
 	            } else {
 	                
 	                html += "<div>";
-	                html += "<div><table class='table'><h6><strong>등록된 댓글이 없습니다.</strong></h6>";
+	                html += "<div><table><h6><strong>등록된 댓글이 없습니다.</strong></h6>";
 	                html += "</table></div>";
 	                html += "</div>";
 	                
@@ -165,5 +163,4 @@
 	}
 	 
 	</script>
-</body>
-</html>
+</div>

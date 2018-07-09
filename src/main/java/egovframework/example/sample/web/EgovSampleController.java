@@ -108,11 +108,16 @@ public class EgovSampleController {
 		paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
 		paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
 		paginationInfo.setPageSize(searchVO.getPageSize());
-
+		System.out.println("\r\n현재 페이지 번호 : "+paginationInfo.getCurrentPageNo()+"\r\n페이지당 레코드수 : "+paginationInfo.getRecordCountPerPage()+"\r\n페이지 사이즈 : "+paginationInfo.getPageSize());
+		System.out.println("\r\n페이지리스트 중 첫번째 페이지 번호 : "+paginationInfo.getFirstPageNoOnPageList());
+		System.out.println("\r\n페이지리스트 중 마지막 페이지 번호 : "+paginationInfo.getLastPageNo());
+		
+		
+		
 		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-
+			
 		List<?> sampleList = sampleService.selectSampleList(searchVO);
 		model.addAttribute("resultList", sampleList);
 
@@ -184,17 +189,19 @@ public class EgovSampleController {
 	 * @exception Exception
 	 */
 	@RequestMapping(value="/updateSampleView.do")
-	public String updateSampleView(@RequestParam("selectedId") String id, 
+	public String updateSampleView(HttpServletRequest req, 
 								   @ModelAttribute("searchVO") SampleDefaultVO searchVO, 
 								   Model model) throws Exception {
 		SampleVO sampleVO = new SampleVO();
-		sampleVO.setId(id);
-		sampleVO = selectSample(sampleVO, searchVO);
-		if(sampleVO.getUsr_pwd() != null){
-			sampleVO.setUsr_pwd("");
-			model.addAttribute(sampleVO);
-			model.addAttribute(searchVO);
-			return "sample/egovSamplePrivate";
+		if(!req.getParameter("selectedId").isEmpty()){
+			sampleVO.setId(req.getParameter("selectedId"));
+			sampleVO = selectSample(sampleVO, searchVO);
+			if(sampleVO.getUsr_pwd() != null){
+				sampleVO.setUsr_pwd("");
+				model.addAttribute(sampleVO);
+				model.addAttribute(searchVO);
+				return "sample/egovSamplePrivate";
+			}
 		}
 		
 		model = fileInfo(model, sampleVO.getId());
@@ -326,13 +333,14 @@ public class EgovSampleController {
 	
 	@RequestMapping(value="/insertComment.do")
     @ResponseBody
-    public String insertComment(@ModelAttribute("CommentVO") CommentVO cvo, HttpSession session) throws Exception{
+    public String insertComment(@ModelAttribute("CommentVO") CommentVO cvo, SampleVO vo, HttpSession session) throws Exception{
         
     	cvo.setRegi_id((String)session.getAttribute("regUser"));
     	if(session.getAttribute("regUser") == null){
     		return "error";
     	}
         commentService.insertComment(cvo);
+        commentService.updateSample(vo);
         
         return "success";
     }

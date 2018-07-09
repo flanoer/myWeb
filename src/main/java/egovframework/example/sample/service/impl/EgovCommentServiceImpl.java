@@ -67,33 +67,30 @@ public class EgovCommentServiceImpl extends EgovAbstractServiceImpl implements E
 
 	@Override
 	public void updateSample(SampleVO vo) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteSample(SampleVO vo) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int selectSamplePwdCheck(SampleVO sampleVO) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Map<String, Object> selectOneFile(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		commentDAO.updateRecordCmtCount(vo);
 	}
 
 	@Override
 	public List<CommentVO> selectCommentByOriRecID(String orirec_id) throws Exception {
 		return commentDAO.selectCommentByOriRecID(orirec_id);
 	}
-	
-	
+
+	@Override
+	public void updateComment(CommentVO cvo) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteComment(CommentVO cvo) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int selectSamplePwdCheck(CommentVO cvo) throws Exception {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 }

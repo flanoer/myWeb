@@ -16,6 +16,7 @@
 		<result property="sdate" column="sdate"/>
 		<result property="edate" column="edate"/>
 		<result property="noti_yn" column="noti_yn"/>
+		<result property="cmt_count" column="cmt_count"/>
 	</resultMap>
 	
 	<resultMap id="comment" class="egovframework.example.sample.service.CommentVO">
@@ -73,13 +74,13 @@
 	</delete>
     
     <select id="sampleDAO.selectSample" resultMap="sample">
-        <![CDATA[
+<![CDATA[
 		SELECT
-		    ID, NAME, DESCRIPTION, USE_YN, REG_USER, USR_PWD, SDATE, EDATE, NOTI_YN
+		    ID, NAME, DESCRIPTION, USE_YN, REG_USER, USR_PWD, SDATE, EDATE, NOTI_YN, CMT_COUNT
 		FROM UTBL 
 		WHERE ID=#id#
         ]]>
-    </select>
+</select>
 	
     <select id="sampleDAO.selectSamplePwdCheck" resultClass="int">
 		SELECT
@@ -91,16 +92,16 @@
 	<select id="sampleDAO.selectSampleList" parameterClass="searchVO" resultClass="egovMap">
 		SELECT T1.*, ROWNUM FROM(
 		    SELECT
-		    ID, NAME, DESCRIPTION, USE_YN, REG_USER, USR_PWD, NOTI_YN, SDATE, EDATE 
+		    ID, NAME, DESCRIPTION, USE_YN, REG_USER, USR_PWD, NOTI_YN, SDATE, EDATE, CMT_COUNT 
 		    FROM UTBL
    <![CDATA[WHERE NOTI_YN = 'Y' AND TO_DATE(SYSDATE) >= TO_DATE(SDATE) AND TO_DATE(SYSDATE) <= TO_DATE(EDATE)]]>
    			ORDER BY ROWNUM DESC
 		)T1                                  
 		UNION ALL
-		SELECT T2.ID, T2.NAME, T2.DESCRIPTION, T2.USE_YN, T2.REG_USER, T2.USR_PWD, T2.NOTI_YN, T2.SDATE, T2.EDATE, ROWNUM FROM(  
+		SELECT T2.ID, T2.NAME, T2.DESCRIPTION, T2.USE_YN, T2.REG_USER, T2.USR_PWD, T2.NOTI_YN, T2.SDATE, T2.EDATE, T2.CMT_COUNT, ROWNUM FROM(  
 			SELECT T1.*, ROWNUM RNUM FROM(
 			    SELECT
-			    ID, NAME, DESCRIPTION, USE_YN, REG_USER, USR_PWD, NOTI_YN, SDATE, EDATE 
+			    ID, NAME, DESCRIPTION, USE_YN, REG_USER, USR_PWD, NOTI_YN, SDATE, EDATE, CMT_COUNT 
 			    FROM UTBL 
 	   <![CDATA[WHERE NOTI_YN = 'N' OR NOTI_YN IS NULL OR TO_DATE(SYSDATE) < TO_DATE(SDATE) OR (NOTI_YN = 'Y' AND TO_DATE(EDATE) <= TO_DATE(SYSDATE))]]>
 			    <isEqual prepend="AND" property="searchCondition" compareValue="0">
@@ -176,5 +177,13 @@
 			DEFAULT
 		)
 	</insert>
+	
+	<update id="sampleDAO.updateRecordCmtCount">
+		UPDATE UTBL
+		SET CMT_COUNT = 
+		(SELECT COUNT(*) FROM U_COMMENT_TBL 
+		WHERE ORIREC_ID = #orirec_id#)
+		WHERE ID = #orirec_id#
+	</update>
 	
 </sqlMap>
